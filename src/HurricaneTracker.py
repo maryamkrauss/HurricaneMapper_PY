@@ -30,6 +30,27 @@ usa_counties = 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/service
 storm_track_points =  "memory\\track_points"
 storm_track_line = "memory\\Tracklines"
 
+#%%
+# Create a list to hold storm names for a season
+storm_names = []
+# Create a list of storm names for a given year
+cursor = arcpy.da.SearchCursor(
+    in_table = ibtracs_NA_points,
+    where_clause = f'SEASON = {storm_season}',
+    field_names = ['NAME']
+    )
+
+# Iterate through the rows in the cursor
+for row in cursor:
+    #Get the storm name
+    storm_name = row[0]
+    if not storm_name in storm_names and storm_name != 'UNNAMED':
+        storm_names.append(storm_name)
+
+del(cursor)
+
+print(storm_names)
+
 # %% [markdown]
 # #### Select point features corresponding to a specific storm (season & name)
 
